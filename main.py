@@ -3,6 +3,7 @@ import shutil
 import sys
 from victory import play_victory_game
 from bank_account import start_bank_account
+
 while True:
     print('*' * 20)
     print('1. создать папку')
