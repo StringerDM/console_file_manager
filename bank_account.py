@@ -23,20 +23,29 @@ def start_bank_account():
 
         choice = input('Выберите пункт меню: ')
         if choice == '1':
-            amount = int(input('На сколько пополнить счет? '))
-            wallet = manage_wallet(wallet, lambda x: x + amount)
-            print('Сумма на счете', wallet)
+            try:
+                amount = int(input('На сколько пополнить счет? '))
+                wallet = manage_wallet(wallet, lambda x: x + amount)
+                print('Сумма на счете', wallet)
+            except ValueError:
+                print("Ошибка, вы ввели не число")
+
         elif choice == '2':
-            amount = int(input('Введите сумму покупки: '))
-            if amount > wallet:
-                print('Недостаточно средств для покупки!')
-            else:
-                goods_name = input('Введите название покупки: ')
-                wallet = manage_wallet(wallet, lambda x: x - amount)
-                history.append((goods_name, amount))
+            try:
+                amount = int(input('Введите сумму покупки: '))
+                if amount > wallet:
+                    print('Недостаточно средств для покупки!')
+                else:
+                    goods_name = input('Введите название покупки: ')
+                    wallet = manage_wallet(wallet, lambda x: x - amount)
+                    history.append((goods_name, amount))
+            except ValueError:
+                print("Ошибка, вы ввели не число")
+
         elif choice == '3':
             for i in history:
                 print(i)
+
         elif choice == '4':
             with open('bank_account.json', 'w') as f:
                 json.dump([wallet, history], f)

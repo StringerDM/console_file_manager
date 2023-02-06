@@ -8,7 +8,8 @@ from bank_account import start_bank_account
 
 def get_file_names_list(func):
     files_list = os.listdir(os.getcwd())
-    return list(filter(func, files_list))
+    return [j for j in files_list if func]
+    # return list(filter(func, files_list))
 
 
 if __name__ == '__main__':
@@ -25,36 +26,34 @@ if __name__ == '__main__':
         print('9. создатель программы')
         print('10. играть в викторину')
         print('11. мой банковский счет')
-        print('12. смена рабочей директории(*необязательный пункт)')
-        print('13. выход')
+        print('12. выход')
         print()
 
         choice = input('Выберите пункт меню: ')
         if choice == '1':
             folder_name = input('Введите название папки для создания: ')
-            if os.path.exists(folder_name):
-                print('Папка с таким именем уже существует')
-            else:
-                os.mkdir(folder_name)
+            print('Папка с таким именем уже существует') if os.path.exists(folder_name) else os.mkdir(folder_name)
 
         if choice == '2':
             path = input('Введите название папки/файла для удаления: ')
-            if not os.path.exists(path):
+            try:
+                if os.path.isfile(path):
+                    os.remove(path)
+                else:
+                    os.rmdir(path)
+            except FileNotFoundError:
                 print('Папка/файл с таким именем не существует')
-            elif os.path.isfile(path):
-                os.remove(path)
-            else:
-                os.rmdir(path)
 
         if choice == '3':
             file_names = input('Введите "название папки/файла, новое название папки/файла" для копирования: ').split(
                 ', ')
-            if not os.path.exists(file_names[0]):
+            try:
+                if os.path.isfile(file_names[0]):
+                    shutil.copy(file_names[0], file_names[1])
+                else:
+                    shutil.copytree(file_names[0], file_names[1])
+            except FileNotFoundError:
                 print('папки/файла с таким именем не существует')
-            elif os.path.isfile(file_names[0]):
-                shutil.copy(file_names[0], file_names[1])
-            else:
-                shutil.copytree(file_names[0], file_names[1])
 
         if choice == '4':
             dir_list = get_file_names_list(lambda d: d)
